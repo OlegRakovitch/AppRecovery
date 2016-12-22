@@ -23,8 +23,9 @@ namespace EasyInstall
             RegisterWindow.ShowDialog();
         }
 
-        private void btnlofin_Click(object sender, EventArgs e)
+        private void btnlogin_Click(object sender, EventArgs e)
         {
+            this.Hide();
             var linkform = new MainWindow();
             linkform.ShowDialog();
         }
