@@ -34,5 +34,12 @@ namespace EasyInstall
             var EditWindow = new AddWindow();
             EditWindow.ShowDialog();
         }
+
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
     }
 }
