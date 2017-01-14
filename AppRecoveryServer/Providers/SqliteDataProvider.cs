@@ -24,7 +24,7 @@ namespace AppRecoveryServer.Providers
 
             ExecuteCommand(command =>
             {
-                command.CommandText = "create table if not exists Items (Id integer primary key, Name text, Description text, Sort integer, Url text)";
+                command.CommandText = "create table if not exists Items (Id integer primary key, Name text, Description text, Sort integer, Url text, UserId integer)";
                 command.ExecuteNonQuery();
             });
         }

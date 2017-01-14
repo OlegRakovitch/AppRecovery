@@ -47,6 +47,7 @@ namespace AppRecoveryServer.Tests
 
         private void TearUp()
         {
+            TestTools.ClearTable<Users>();
             TestTools.ClearTable<Items>();
 
             Users user = new Users();
@@ -66,12 +67,14 @@ namespace AppRecoveryServer.Tests
             var name = "name";
             var sort = 123;
             var url = "url";
+            var userId = dataProvider.SelectAll<Users>().Single().Id;
 
             Items item = new Items();
             item.Description = description;
             item.Name = name;
             item.Sort = sort;
             item.Url = url;
+            item.UserId = userId;
 
             dataProvider.Insert(item);
 
@@ -99,6 +102,7 @@ namespace AppRecoveryServer.Tests
             var name = "name";
             var sort = 123;
             var url = "url";
+            var userId = dataProvider.SelectAll<Users>().Single().Id;
 
             using (var client = server.CreateClient())
             {
@@ -113,19 +117,23 @@ namespace AppRecoveryServer.Tests
                 Assert.Equal(description, item.Description);
                 Assert.Equal(sort, item.Sort);
                 Assert.Equal(url, item.Url);
+                Assert.Equal(userId, item.UserId);
             }
         }
 
-        [Fact(DisplayName = "InsertItemTest")]
+        [Fact(DisplayName = "UpdateItemTest")]
         public async Task UpdateItemTest()
         {
             TearUp();
+
+            var userId = dataProvider.SelectAll<Users>().Single().Id;
 
             Items item = new Items();
             item.Description = "descrption";
             item.Name = "name";
             item.Sort = 123;
             item.Url = "url";
+            item.UserId = userId;
 
             dataProvider.Insert(item);
 
@@ -149,6 +157,7 @@ namespace AppRecoveryServer.Tests
                 Assert.Equal(otherDescription, item.Description);
                 Assert.Equal(otherSort, item.Sort);
                 Assert.Equal(otherUrl, item.Url);
+                Assert.Equal(userId, item.UserId);
             }
         }
 
@@ -157,11 +166,14 @@ namespace AppRecoveryServer.Tests
         {
             TearUp();
 
+            var userId = dataProvider.SelectAll<Users>().Single().Id;
+
             Items item = new Items();
             item.Description = "descrption";
             item.Name = "name";
             item.Sort = 123;
             item.Url = "url";
+            item.UserId = userId;
 
             dataProvider.Insert(item);
 
@@ -173,10 +185,11 @@ namespace AppRecoveryServer.Tests
             var url = "otherUrl";
 
             Items otherItem = new Items();
-            item.Description = description;
-            item.Name = name;
-            item.Sort = sort;
-            item.Url = url;
+            otherItem.Description = description;
+            otherItem.Name = name;
+            otherItem.Sort = sort;
+            otherItem.Url = url;
+            otherItem.UserId = userId;
 
             dataProvider.Insert(item);
 
@@ -193,6 +206,7 @@ namespace AppRecoveryServer.Tests
                 Assert.Equal(description, leftoverItem.Description);
                 Assert.Equal(sort, leftoverItem.Sort);
                 Assert.Equal(url, leftoverItem.Url);
+                Assert.Equal(userId, leftoverItem.UserId);
             }
         }
     }
