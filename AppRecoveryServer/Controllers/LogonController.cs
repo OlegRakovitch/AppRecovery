@@ -16,8 +16,8 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpPost]
         public String Post(
-            [FromBody]String clientId,
-            [FromBody]String clientSecret)
+            [FromForm]String clientId,
+            [FromForm]String clientSecret)
         {
             throw new NotImplementedException();
         }
@@ -29,9 +29,9 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpPut]
         public String Put(
-            [FromBody]String clientId,
-            [FromBody]String email,
-            [FromBody]String clientSecret)
+            [FromForm]String clientId,
+            [FromForm]String email,
+            [FromForm]String clientSecret)
         {
             throw new NotImplementedException();
         }

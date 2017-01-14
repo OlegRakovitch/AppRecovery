@@ -16,8 +16,8 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpGet]
         public String Get(
-            [FromBody]String clientId,
-            [FromBody]String clientSecret)
+            [FromHeader]String clientId,
+            [FromHeader]String clientSecret)
         {
             throw new NotImplementedException();
         }
@@ -29,12 +29,12 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpPost]
         public String Post(
-            [FromBody]String clientId,
-            [FromBody]String clientSecret,
-            [FromBody]String caption,
-            [FromBody]String description,
-            [FromBody]int order,
-            [FromBody]String link)
+            [FromHeader]String clientId,
+            [FromHeader]String clientSecret,
+            [FromForm]String caption,
+            [FromForm]String description,
+            [FromForm]int order,
+            [FromForm]String link)
         {
             throw new NotImplementedException();
         }
@@ -46,12 +46,12 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpPatch("{id}")]
         public String Patch(int id,
-            [FromBody]String clientId,
-            [FromBody]String clientSecret,
-            [FromBody]String caption,
-            [FromBody]String description,
-            [FromBody]int order,
-            [FromBody]String link)
+            [FromHeader]String clientId,
+            [FromHeader]String clientSecret,
+            [FromForm]String caption,
+            [FromForm]String description,
+            [FromForm]int order,
+            [FromForm]String link)
         {
             throw new NotImplementedException();
         }
@@ -63,8 +63,8 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpDelete("{id}")]
         public String Delete(int id,
-            [FromBody]String clientId,
-            [FromBody]String clientSecret)
+            [FromHeader]String clientId,
+            [FromHeader]String clientSecret)
         {
             throw new NotImplementedException();
         }
