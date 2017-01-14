@@ -16,20 +16,34 @@ namespace AppRecoveryServer.Providers
         protected abstract void PrepareSelectByFilter<T>(DbCommand command, String filter);
         protected abstract void PrepareUpdateById<T>(DbCommand command, T entity);
         protected abstract T ParseSelectResult<T>(object[] values);
+        public abstract void CreateTables();
 
-
-        protected DbCommand CreateCommand()
+        protected T ExecuteCommand<T>(Func<DbCommand, T> execute)
         {
             using (var connection = CreateConnection())
             {
-                return connection.CreateCommand();
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    return execute(command);
+                }
             }
+        }
+
+        protected void ExecuteCommand(Action<DbCommand> execute)
+        {
+            ExecuteCommand(command =>
+            {
+                execute(command);
+                return true;
+            });
         }
 
         public IEnumerable<T> SelectAll<T>()
         {
             var propertiesCount = typeof(T).GetProperties().Length;
-            using (var command = CreateCommand())
+
+            return ExecuteCommand(command =>
             {
                 PrepareSelectAll<T>(command);
                 using (var dataReader = command.ExecuteReader())
@@ -43,13 +57,14 @@ namespace AppRecoveryServer.Providers
                     }
                     return results;
                 }
-            }
+            });
         }
 
         public T SelectByFilter<T>(string filter)
         {
             var propertiesCount = typeof(T).GetProperties().Length;
-            using (var command = CreateCommand())
+
+            return ExecuteCommand(command =>
             {
                 PrepareSelectByFilter<T>(command, filter);
                 using (var dataReader = command.ExecuteReader())
@@ -69,34 +84,34 @@ namespace AppRecoveryServer.Providers
                     }
                     return ParseSelectResult<T>(propertiesValues);
                 }
-            }
+            });
         }
 
         public int Insert<T>(T entity)
         {
-            using (var command = CreateCommand())
+            return ExecuteCommand(command =>
             {
                 PrepareInsert<T>(command, entity);
                 return command.ExecuteNonQuery();
-            }
+            });
         }
 
         public int UpdateById<T>(T entity)
         {
-            using (var command = CreateCommand())
+            return ExecuteCommand(command =>
             {
                 PrepareUpdateById<T>(command, entity);
                 return command.ExecuteNonQuery();
-            }
+            });
         }
 
         public int DeleteById<T>(int id)
         {
-            using (var command = CreateCommand())
+            return ExecuteCommand(command =>
             {
                 PrepareDeleteById<T>(command, id);
                 return command.ExecuteNonQuery();
-            }
+            });
         }
     }
 }

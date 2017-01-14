@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace AppRecoveryServer.Providers
 {
-    interface IDataProvider
+    public interface IDataProvider
     {
+        void CreateTables();
+
         IEnumerable<T> SelectAll<T>();
 
         T SelectByFilter<T>(String filter);

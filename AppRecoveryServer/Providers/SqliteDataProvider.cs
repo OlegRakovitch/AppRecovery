@@ -13,5 +13,20 @@ namespace AppRecoveryServer.Providers
         {
             return new SqliteConnection(Configuration.ConnectionString);
         }
+
+        public override void CreateTables()
+        {
+            ExecuteCommand(command =>
+            {
+                command.CommandText = "create table if not exists Users (Id integer primary key, Login text, Email text, Password text)";
+                command.ExecuteNonQuery();
+            });
+
+            ExecuteCommand(command =>
+            {
+                command.CommandText = "create table if not exists Items (Id integer primary key, Name text, Description text, Sort integer, Url text)";
+                command.ExecuteNonQuery();
+            });
+        }
     }
 }

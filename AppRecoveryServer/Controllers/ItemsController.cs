@@ -34,7 +34,7 @@ namespace AppRecoveryServer.Controllers
             [FromForm]String caption,
             [FromForm]String description,
             [FromForm]int order,
-            [FromForm]String link)
+            [FromForm]String url)
         {
             throw new NotImplementedException();
         }
@@ -51,7 +51,7 @@ namespace AppRecoveryServer.Controllers
             [FromForm]String caption,
             [FromForm]String description,
             [FromForm]int order,
-            [FromForm]String link)
+            [FromForm]String url)
         {
             throw new NotImplementedException();
         }

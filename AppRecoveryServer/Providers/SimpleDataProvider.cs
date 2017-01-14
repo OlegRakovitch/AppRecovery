@@ -9,6 +9,8 @@ namespace AppRecoveryServer.Providers
 {
     public abstract class SimpleDataProvider : AbstractDataProvider
     {
+        private const String idColumn = "Id";
+
         protected override void PrepareSelectAll<T>(DbCommand command)
         {
             var type = typeof(T);
@@ -45,7 +47,7 @@ namespace AppRecoveryServer.Providers
         protected override void PrepareInsert<T>(DbCommand command, T entity)
         {
             var type = typeof(T);
-            var properties = type.GetProperties();
+            var properties = type.GetProperties().Where(property => property.Name != idColumn);
 
             var tableName = type.Name;
             var columns = String.Join(",", properties.Select(property => property.Name));
@@ -59,16 +61,16 @@ namespace AppRecoveryServer.Providers
             var properties = type.GetProperties();
 
             var tableName = type.Name;
-            var values = String.Join(",", properties.Select(property => $"{property.Name} = '{property.GetValue(entity)}'"));
-            var id = properties.Single(property => property.Name == "id").GetValue(entity);
-            command.CommandText = $"update {tableName} set {values} where id = {id}";
+            var values = String.Join(",", properties.Where(property => property.Name != idColumn).Select(property => $"{property.Name} = '{property.GetValue(entity)}'"));
+            var id = properties.Single(property => property.Name == idColumn).GetValue(entity);
+            command.CommandText = $"update {tableName} set {values} where {idColumn} = {id}";
         }
 
         protected override void PrepareDeleteById<T>(DbCommand command, int id)
         {
             var type = typeof(T);
             var properties = type.GetProperties();
-            command.CommandText = $"delete from {type.Name} where id = {id}";
+            command.CommandText = $"delete from {type.Name} where {idColumn} = {id}";
         }
     }
 }
