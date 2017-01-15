@@ -17,17 +17,17 @@ namespace AppRecoveryServer.Controllers
         [RequireHttps]
 #endif
         [HttpPost]
-        public String Post(
+        public IActionResult Post(
             [FromBody]SignInRequest data)
         {
             if(UsersManager.ValidateUser(data.clientId, data.clientSecret) != 0)
             {
-                return "OK";
+                return Json(new { status = StatusMessages.OK });
             }
             else
             {
                 this.Response.StatusCode = 401;
-                return ErrorMessages.UserNotFound;
+                return Json(new { status = StatusMessages.UserNotFound });
             }
         }
 
@@ -37,18 +37,18 @@ namespace AppRecoveryServer.Controllers
         [RequireHttps]
 #endif
         [HttpPut]
-        public String Put(
+        public IActionResult Put(
             [FromBody]SignUpRequest data)
         {
             if(UsersManager.ValidateUserNotExists(data.clientId))
             {
                 UsersManager.CreateUser(data.clientId, data.clientSecret, data.email);
-                return "OK";
+                return Json(new { status = StatusMessages.OK });
             }
             else
             {
                 this.Response.StatusCode = 409;
-                return "User with specified login already exists";
+                return Json(new { status = StatusMessages.UserAlreadyExists });
             }
         }
     }

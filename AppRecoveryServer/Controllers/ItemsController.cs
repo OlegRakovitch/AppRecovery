@@ -28,7 +28,7 @@ namespace AppRecoveryServer.Controllers
             if(userId == 0)
             {
                 this.Response.StatusCode = 401;
-                return JsonConvert.SerializeObject(new { status = ErrorMessages.UserNotFound });
+                return JsonConvert.SerializeObject(new { status = StatusMessages.UserNotFound });
             }
             else
             {
@@ -53,12 +53,12 @@ namespace AppRecoveryServer.Controllers
             if (userId == 0)
             {
                 this.Response.StatusCode = 401;
-                return Json(new { status = ErrorMessages.UserNotFound });
+                return Json(new { status = StatusMessages.UserNotFound });
             }
             else
             {
                 ItemsManager.InsertItem(userId, data.caption, data.description, data.order, data.url);
-                return Json(new { status = "OK" });
+                return Json(new { status = StatusMessages.OK });
             }
         }
 
@@ -68,7 +68,7 @@ namespace AppRecoveryServer.Controllers
         [RequireHttps]
 #endif
         [HttpPatch("{id}")]
-        public String Patch(int id,
+        public IActionResult Patch(int id,
             [FromHeader]String clientId,
             [FromHeader]String clientSecret,
             [FromBody]UpdateItemRequest data)
@@ -77,18 +77,18 @@ namespace AppRecoveryServer.Controllers
             if (userId == 0)
             {
                 this.Response.StatusCode = 401;
-                return JsonConvert.SerializeObject(new { status = ErrorMessages.UserNotFound });
+                return Json(new { status = StatusMessages.UserNotFound });
             }
             else
             {
                 if(ItemsManager.UpdateItem(id, userId, data.caption, data.description, data.order, data.url))
                 {
-                    return JsonConvert.SerializeObject(new { status = "OK" });
+                    return Json(new { status = StatusMessages.OK });
                 }
                 else
                 {
                     this.Response.StatusCode = 404;
-                    return JsonConvert.SerializeObject(new { status = ErrorMessages.ItemNotFound });
+                    return Json(new { status = StatusMessages.ItemNotFound });
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace AppRecoveryServer.Controllers
         [RequireHttps]
 #endif
         [HttpDelete("{id}")]
-        public String Delete(int id,
+        public IActionResult Delete(int id,
             [FromHeader]String clientId,
             [FromHeader]String clientSecret)
         {
@@ -107,18 +107,18 @@ namespace AppRecoveryServer.Controllers
             if (userId == 0)
             {
                 this.Response.StatusCode = 401;
-                return JsonConvert.SerializeObject(new { status = ErrorMessages.UserNotFound });
+                return Json(new { status = StatusMessages.UserNotFound });
             }
             else
             {
                 if(ItemsManager.DeleteItem(id, userId))
                 {
-                    return JsonConvert.SerializeObject(new { status = "OK" });
+                    return Json(new { status = StatusMessages.OK });
                 }
                 else
                 {
                     this.Response.StatusCode = 404;
-                    return JsonConvert.SerializeObject(new { status = ErrorMessages.ItemNotFound });
+                    return Json(new { status = StatusMessages.ItemNotFound });
                 }
             }
         }
