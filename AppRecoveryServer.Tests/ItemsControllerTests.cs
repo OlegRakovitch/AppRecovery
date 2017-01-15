@@ -45,6 +45,13 @@ namespace AppRecoveryServer.Tests
             return message;
         }
 
+        private void SetContent(HttpRequestMessage message, object requestData)
+        {
+            message.Content = new StringContent(JsonConvert.SerializeObject(requestData));
+            message.Content.Headers.Remove("Content-Type");
+            message.Content.Headers.Add("Content-Type", "application/json");
+        }
+
         private void TearUp()
         {
             TestTools.ClearTable<Users>();
@@ -78,18 +85,21 @@ namespace AppRecoveryServer.Tests
 
             dataProvider.Insert(item);
 
+            var itemId = dataProvider.SelectAll<Items>().Single().Id;
+
             using (var client = server.CreateClient())
             {
                 var message = CreateMessage(HttpMethod.Get);
                 var response = await client.SendAsync(message);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                var responseDefinition = new { caption = "", description = "", order = 0, url = "" };
+                var responseDefinition = new { id = 0, caption = "", description = "", order = 0, url = "" };
                 var deserializedResponse = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), responseDefinition);
                 Assert.Equal(name, deserializedResponse.caption);
                 Assert.Equal(description, deserializedResponse.description);
                 Assert.Equal(sort, deserializedResponse.order);
                 Assert.Equal(url, deserializedResponse.url);
+                Assert.Equal(itemId, deserializedResponse.id);
             }
         }
 
@@ -107,8 +117,7 @@ namespace AppRecoveryServer.Tests
             using (var client = server.CreateClient())
             {
                 var message = CreateMessage(HttpMethod.Post);
-                var requestData = new { caption = name, description = description, order = sort, url = url };
-                message.Content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "applicaiton/json");
+                SetContent(message, new { caption = name, description = description, order = sort, url = url });
                 var response = await client.SendAsync(message);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -147,8 +156,7 @@ namespace AppRecoveryServer.Tests
             using (var client = server.CreateClient())
             {
                 var message = CreateMessage(new HttpMethod("PATCH"), $"/{itemId}");
-                var requestData = new { caption = otherName, description = otherDescription, order = otherSort, url = otherUrl };
-                message.Content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "applicaiton/json");
+                SetContent(message, new { caption = otherName, description = otherDescription, order = otherSort, url = otherUrl });
                 var response = await client.SendAsync(message);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -158,6 +166,7 @@ namespace AppRecoveryServer.Tests
                 Assert.Equal(otherSort, item.Sort);
                 Assert.Equal(otherUrl, item.Url);
                 Assert.Equal(userId, item.UserId);
+                Assert.Equal(itemId, item.Id);
             }
         }
 
@@ -191,7 +200,7 @@ namespace AppRecoveryServer.Tests
             otherItem.Url = url;
             otherItem.UserId = userId;
 
-            dataProvider.Insert(item);
+            dataProvider.Insert(otherItem);
 
             using (var client = server.CreateClient())
             {

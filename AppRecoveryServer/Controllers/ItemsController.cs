@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using AppRecoveryServer.Managers;
+using AppRecoveryServer.Providers;
+using AppRecoveryServer.Models;
+using Newtonsoft.Json;
+using AppRecoveryServer.RequestBodies;
 
 namespace AppRecoveryServer.Controllers
 {
@@ -19,7 +24,18 @@ namespace AppRecoveryServer.Controllers
             [FromHeader]String clientId,
             [FromHeader]String clientSecret)
         {
-            throw new NotImplementedException();
+            var userId = UsersManager.ValidateUser(clientId, clientSecret);
+            if(userId == 0)
+            {
+                this.Response.StatusCode = 401;
+                return JsonConvert.SerializeObject(new { status = ErrorMessages.UserNotFound });
+            }
+            else
+            {
+                var items = ItemsManager.GetItems(userId);
+                return String.Join(Environment.NewLine, items.Select(item => 
+                  JsonConvert.SerializeObject(new { id = item.Id, caption = item.Name, description = item.Description, order = item.Sort, url = item.Url, status = "OK" })));
+            }
         }
 
         //POST api/items
@@ -28,15 +44,22 @@ namespace AppRecoveryServer.Controllers
         [RequireHttps]
 #endif
         [HttpPost]
-        public String Post(
+        public IActionResult Post(
             [FromHeader]String clientId,
             [FromHeader]String clientSecret,
-            [FromForm]String caption,
-            [FromForm]String description,
-            [FromForm]int order,
-            [FromForm]String url)
+            [FromBody]InsertItemRequest data)
         {
-            throw new NotImplementedException();
+            var userId = UsersManager.ValidateUser(clientId, clientSecret);
+            if (userId == 0)
+            {
+                this.Response.StatusCode = 401;
+                return Json(new { status = ErrorMessages.UserNotFound });
+            }
+            else
+            {
+                ItemsManager.InsertItem(userId, data.caption, data.description, data.order, data.url);
+                return Json(new { status = "OK" });
+            }
         }
 
         //PATCH api/items/1
@@ -48,12 +71,26 @@ namespace AppRecoveryServer.Controllers
         public String Patch(int id,
             [FromHeader]String clientId,
             [FromHeader]String clientSecret,
-            [FromForm]String caption,
-            [FromForm]String description,
-            [FromForm]int order,
-            [FromForm]String url)
+            [FromBody]UpdateItemRequest data)
         {
-            throw new NotImplementedException();
+            var userId = UsersManager.ValidateUser(clientId, clientSecret);
+            if (userId == 0)
+            {
+                this.Response.StatusCode = 401;
+                return JsonConvert.SerializeObject(new { status = ErrorMessages.UserNotFound });
+            }
+            else
+            {
+                if(ItemsManager.UpdateItem(id, userId, data.caption, data.description, data.order, data.url))
+                {
+                    return JsonConvert.SerializeObject(new { status = "OK" });
+                }
+                else
+                {
+                    this.Response.StatusCode = 404;
+                    return JsonConvert.SerializeObject(new { status = ErrorMessages.ItemNotFound });
+                }
+            }
         }
 
         //DELETE api/items/1
@@ -66,7 +103,24 @@ namespace AppRecoveryServer.Controllers
             [FromHeader]String clientId,
             [FromHeader]String clientSecret)
         {
-            throw new NotImplementedException();
+            var userId = UsersManager.ValidateUser(clientId, clientSecret);
+            if (userId == 0)
+            {
+                this.Response.StatusCode = 401;
+                return JsonConvert.SerializeObject(new { status = ErrorMessages.UserNotFound });
+            }
+            else
+            {
+                if(ItemsManager.DeleteItem(id, userId))
+                {
+                    return JsonConvert.SerializeObject(new { status = "OK" });
+                }
+                else
+                {
+                    this.Response.StatusCode = 404;
+                    return JsonConvert.SerializeObject(new { status = ErrorMessages.ItemNotFound });
+                }
+            }
         }
     }
 }

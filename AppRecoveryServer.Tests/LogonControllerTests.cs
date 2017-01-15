@@ -40,6 +40,19 @@ namespace AppRecoveryServer.Tests
             TestTools.ClearTable<Users>();
         }
 
+        private HttpRequestMessage CreateMessage(HttpMethod method)
+        {
+            var message = new HttpRequestMessage(method, $"api/logon");
+            return message;
+        }
+
+        private void SetContent(HttpRequestMessage message, object requestData)
+        {
+            message.Content = new StringContent(JsonConvert.SerializeObject(requestData));
+            message.Content.Headers.Remove("Content-Type");
+            message.Content.Headers.Add("Content-Type", "application/json");
+        }
+
         [Fact(DisplayName = "SignInTest")]
         public async Task SignInTest()
         {
@@ -58,9 +71,9 @@ namespace AppRecoveryServer.Tests
 
             using (var client = server.CreateClient())
             {
-                var requestData = new { clientId = login, clientSecret = password };
-                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "applicaiton/json");
-                var response = await client.PostAsync("api/logon", content);
+                var message = CreateMessage(HttpMethod.Post);
+                SetContent(message, new { clientId = login, clientSecret = password });
+                var response = await client.SendAsync(message);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             }
         }
@@ -76,9 +89,9 @@ namespace AppRecoveryServer.Tests
 
             using (var client = server.CreateClient())
             {
-                var requestData = new { clientId = login, email = email, clientSecret = password };
-                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-                var response = await client.PutAsync("api/logon", content);
+                var message = CreateMessage(HttpMethod.Put);
+                SetContent(message, new { clientId = login, email = email, clientSecret = password });
+                var response = await client.SendAsync(message);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 var user = dataProvider.SelectAll<Users>().Single();

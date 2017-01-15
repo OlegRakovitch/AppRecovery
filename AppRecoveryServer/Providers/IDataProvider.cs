@@ -11,7 +11,7 @@ namespace AppRecoveryServer.Providers
 
         IEnumerable<T> SelectAll<T>();
 
-        T SelectByFilter<T>(String filter);
+        IEnumerable<T> SelectByFilter<T>(String filter);
 
         int Insert<T>(T entity);
 

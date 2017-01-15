@@ -1,7 +1,7 @@
 ﻿{
   "buildOptions": {
     "copyToOutput": {
-      "include": [ "appsettings.json" ]
+      "include": [ "appsettings.json", "xunit.runner.json" ]
     }
   },
   "version": "1.0.0-*",

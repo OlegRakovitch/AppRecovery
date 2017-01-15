@@ -40,6 +40,7 @@ namespace AppRecoveryServer.Providers
             foreach (var property in properties)
             {
                 property.SetValue(t, Convert.ChangeType(values[valueIterator], property.PropertyType));
+                valueIterator++;
             }
             return (T)t;
         }

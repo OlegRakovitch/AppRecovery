@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using AppRecoveryServer.Managers;
+using AppRecoveryServer.RequestBodies;
 
 namespace AppRecoveryServer.Controllers
 {
@@ -16,10 +18,17 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpPost]
         public String Post(
-            [FromForm]String clientId,
-            [FromForm]String clientSecret)
+            [FromBody]SignInRequest data)
         {
-            throw new NotImplementedException();
+            if(UsersManager.ValidateUser(data.clientId, data.clientSecret) != 0)
+            {
+                return "OK";
+            }
+            else
+            {
+                this.Response.StatusCode = 401;
+                return ErrorMessages.UserNotFound;
+            }
         }
 
         //PUT api/logon
@@ -29,11 +38,18 @@ namespace AppRecoveryServer.Controllers
 #endif
         [HttpPut]
         public String Put(
-            [FromForm]String clientId,
-            [FromForm]String email,
-            [FromForm]String clientSecret)
+            [FromBody]SignUpRequest data)
         {
-            throw new NotImplementedException();
+            if(UsersManager.ValidateUserNotExists(data.clientId))
+            {
+                UsersManager.CreateUser(data.clientId, data.clientSecret, data.email);
+                return "OK";
+            }
+            else
+            {
+                this.Response.StatusCode = 409;
+                return "User with specified login already exists";
+            }
         }
     }
 }

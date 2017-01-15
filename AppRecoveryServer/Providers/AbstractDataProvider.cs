@@ -60,7 +60,7 @@ namespace AppRecoveryServer.Providers
             });
         }
 
-        public T SelectByFilter<T>(string filter)
+        public IEnumerable<T> SelectByFilter<T>(string filter)
         {
             var propertiesCount = typeof(T).GetProperties().Length;
 
@@ -69,20 +69,14 @@ namespace AppRecoveryServer.Providers
                 PrepareSelectByFilter<T>(command, filter);
                 using (var dataReader = command.ExecuteReader())
                 {
-                    object[] propertiesValues = null;
+                    List<T> results = new List<T>();
                     while (dataReader.Read())
                     {
-                        if (propertiesValues == null)
-                        {
-                            propertiesValues = new object[propertiesCount];
-                        }
-                        else
-                        {
-                            throw new Exception("Data returned more than once");
-                        }
+                        var propertiesValues = new object[propertiesCount];
                         dataReader.GetValues(propertiesValues);
+                        results.Add(ParseSelectResult<T>(propertiesValues));
                     }
-                    return ParseSelectResult<T>(propertiesValues);
+                    return results;
                 }
             });
         }
