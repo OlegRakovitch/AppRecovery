@@ -9,7 +9,7 @@ namespace EasyInstall
 {
     class FileManager
     {
-        public static void RunningApp()
+        public static void Launch()
         {
             Process run = new Process();
             run.StartInfo.FileName = @"C:\Windows\System32\cmd.exe";
