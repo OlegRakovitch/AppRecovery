@@ -34,5 +34,10 @@ namespace EasyInstall
             var EditWindow = new AddWindow();
             EditWindow.ShowDialog();
         }
+
+        private void btnminus_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("NotImplementedException");
+        }
     }
 }
