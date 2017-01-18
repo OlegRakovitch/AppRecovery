@@ -95,8 +95,8 @@
             this.Controls.Add(this.btnplus);
             this.Controls.Add(this.dataGridView1);
             this.Name = "MainWindow";
-            this.Text = "Form2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.Text = "MainWindow";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
