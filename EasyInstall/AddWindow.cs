@@ -12,6 +12,10 @@ namespace EasyInstall
 {
     public partial class AddWindow : Form
     {
+        public bool okpressed;
+        public string programmname;
+        public string discriprion;
+        public string url;
         public AddWindow()
         {
             InitializeComponent();
@@ -19,7 +23,18 @@ namespace EasyInstall
 
         private void btnadd_Click(object sender, EventArgs e)
         {
-            this.Close();
+            programmname = tbprogrammname.Text;
+            discriprion = tbdiscription.Text;
+            url = tburl.Text;
+
+            okpressed = true;
+            Close();
+        }
+
+        private void btncancel_Click(object sender, EventArgs e)
+        {
+            okpressed = false;
+            Close();
         }
     }
 }

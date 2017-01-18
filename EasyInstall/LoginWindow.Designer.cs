@@ -102,7 +102,7 @@
             this.Controls.Add(this.btnregister);
             this.Controls.Add(this.btnlogin);
             this.Name = "LoginWindow";
-            this.Text = "Form1";
+            this.Text = "LoginWindow";
             this.ResumeLayout(false);
             this.PerformLayout();
 
