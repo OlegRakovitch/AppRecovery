@@ -62,6 +62,7 @@
             this.btnminus.TabIndex = 2;
             this.btnminus.Text = "Minus";
             this.btnminus.UseVisualStyleBackColor = true;
+            this.btnminus.Click += new System.EventHandler(this.btnminus_Click);
             // 
             // btninstall
             // 

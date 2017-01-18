@@ -35,11 +35,14 @@ namespace EasyInstall
             EditWindow.ShowDialog();
         }
 
+        private void btnminus_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
         }
-
     }
 }
