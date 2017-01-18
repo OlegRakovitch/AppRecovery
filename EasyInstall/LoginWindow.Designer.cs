@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnlofin = new System.Windows.Forms.Button();
+            this.btnlogin = new System.Windows.Forms.Button();
             this.btnregister = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -36,15 +36,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // btnlofin
+            // btnlogin
             // 
-            this.btnlofin.Location = new System.Drawing.Point(57, 210);
-            this.btnlofin.Name = "btnlofin";
-            this.btnlofin.Size = new System.Drawing.Size(95, 48);
-            this.btnlofin.TabIndex = 0;
-            this.btnlofin.Text = "Login";
-            this.btnlofin.UseVisualStyleBackColor = true;
-            this.btnlofin.Click += new System.EventHandler(this.btnlofin_Click);
+            this.btnlogin.Location = new System.Drawing.Point(57, 210);
+            this.btnlogin.Name = "btnlogin";
+            this.btnlogin.Size = new System.Drawing.Size(95, 48);
+            this.btnlogin.TabIndex = 0;
+            this.btnlogin.Text = "Login";
+            this.btnlogin.UseVisualStyleBackColor = true;
+            this.btnlogin.Click += new System.EventHandler(this.btnlogin_Click);
             // 
             // btnregister
             // 
@@ -90,7 +90,7 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Password";
             // 
-            // Form1
+            // LoginWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -100,8 +100,8 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnregister);
-            this.Controls.Add(this.btnlofin);
-            this.Name = "Form1";
+            this.Controls.Add(this.btnlogin);
+            this.Name = "LoginWindow";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -110,7 +110,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnlofin;
+        private System.Windows.Forms.Button btnlogin;
         private System.Windows.Forms.Button btnregister;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
